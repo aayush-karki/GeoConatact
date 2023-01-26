@@ -1,0 +1,64 @@
+@bgColor: #fff;
+@hoverColor: rgb(151, 228, 252);
+@borderRadius: 10px;
+@borderWidth: 4px;
+@defaultPadding: 1em;
+@defaultMargin: 0.5em;
+
+.block {
+	padding: @defaultPadding;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#mapBox {
+	height: 50vh;
+}
+.card {
+	margin: @defaultMargin;
+	border-radius: @borderRadius;
+	border-width: @borderWidth;
+	min-height: 30em;
+	.block;
+}
+
+h1,
+.container {
+	.block;
+}
+
+p {
+	padding-left: @defaultPadding;
+	padding-right: @defaultPadding;
+}
+
+#zip {
+	width: 9em;
+}
+
+#updateInfo,
+#AddNewBtn,
+#sendSpam,
+h3,
+#ContactForm > fieldset:last-child:first-child {
+	margin-left: auto;
+	margin-bottom: auto;
+	margin-right: auto;
+	margin-top: auto;
+	width: fit-content;
+}
+
+#updateInfo:hover,
+#AddNewBtn:hover,
+#sendSpam:hover,
+.dyButton:hover,
+.nav-link:hover {
+	background-color: @hoverColor;
+}
+
+#ContactTitle {
+	margin-left: auto;
+	margin-right: auto;
+	width: fit-content;
+	background-color: @bgColor;
+}

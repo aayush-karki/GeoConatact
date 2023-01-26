@@ -1,0 +1,122 @@
+doctype html
+html
+	head
+		script(src="https://unpkg.com/axios/dist/axios.min.js")
+		link(rel="stylesheet", href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css", integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==", crossorigin="")
+		script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js", integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==", crossorigin="")
+		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous") 
+		//script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" //integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")	
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		script(src="javascripts/geocoding.js")
+
+	body(onload="Init()")
+		.container
+			nav.navbar-light.bg-light
+				.container-fluid
+					a.navbar-brand GeoContact
+					a.navbar-brand.nav-link(href="/") HOME
+					a.navbar-brand.nav-link(href="#", onclick="LoadNewContactForm()") MAILER
+
+			.row
+				h3 Contact Table
+			.row
+				table(id="contactTable").table.table-bordered.table-hover
+					thead.table-primary
+						tr
+							th(rowspan="2") Title
+							th(rowspan="2") Name
+							th(rowspan="2") Address
+							th(rowspan="2") Phone
+							th(rowspan="2") Email
+							th(rowspan = "1", colspan="3") Contact By
+							th(rowspan="2")
+							th(rowspan="2")
+						tr
+							th Phone
+							th Mail
+							th Email
+
+					tbody
+			.row
+				.col-xs-12.col-lg-6
+					//- map
+					#mapBox.card
+
+				.col-xs-12.col-lg-6
+					.card
+						h3(id="ThankYouPage") Thank you for your Submission!
+
+						input.form-control(type="button", id="AddNewBtn", onclick="LoadNewContactForm()", value="Add New Contact")
+
+						.card-body
+							h3.card-header(id="ContactTitle") Contact Form
+							form(id="ContactForm").form
+								fieldset
+									.form-check.form-check-inline
+										input.form-check-input(type="radio", id="tilteMr", name="radTitle", value="Mr.", checked) 
+										label.form-check-label(for="radTitle")  Mr.
+									.form-check.form-check-inline
+										input.form-check-input(type="radio",id="tilteMrs", name="radTitle", value="Mrs.") 
+										label.form-check-label(for="radTitle")  Mrs.
+									.form-check.form-check-inline
+										input.form-check-input(type="radio",id="tilteMs", name="radTitle", value="Ms.") 
+										label.form-check-label(for="radTitle")  Ms.
+									.form-check.form-check-inline
+										input.form-check-input(type="radio",id="tilteDr", name="radTitle", value="Dr.") 
+										label.form-check-label(for="radTitle")  Dr.
+									.form-group
+										label.form-label(for="fName") First Name:
+										input.form-control(type="text", id="fName", name="txtFirstName", placeholder="John", required="true")
+									.form-group
+										label.form-label(for="lName") Last Name:
+										input.form-control(type="text", id="lName", name="txtLastName", placeholder="Doe", required="true")
+									.form-group
+										label.form-label(for="stret") Street:
+										input.form-control(type="text", id="street", name="txtStreet", placeholder="100 Main Street", required="true")
+									.form-group
+										label.form-label(for="city") City:
+										input.form-control(type="text", id="city", name="txtCity", placeholder="Mahwah", required="true")
+
+										//- lists all the states
+										- 
+											let stateList = ["AK", "Al", "AR", "AZ", "CA","CO", "CT","DE", "FL", "GA",
+												"HI", "ID", "IL", "IA", "IN","KS", "KY","LA", "MA", "ME",
+												"MD", "MI", "MN", "MO", "MS","MT", "NC","ND", "NE", "NH",
+												"NJ", "NM", "NV", "NY", "OH","OK", "OR","PA", "RI", "SC",
+												"SD", "TN", "TX", "UT", "VA","VT", "WA","WI", "WV", "WY"]
+									.form-select.form-select-inline
+										label.form-select-label(for="state") State:
+										select.form-control(id="state", name="selState")
+											option(value=stateList[0], selected)  #{stateList[0]}
+											- for( i  = 1; i < stateList.length; ++i){
+												option(value=stateList[i]) #{stateList[i]}
+											- }
+									.form-select
+										label.form-label(for="zip") Zip
+										input.form-control(type="number", id="zip", name="numZIP", placeholder="07430",  required="true")
+									.form-group
+										label.form-label(for="ph") Phone:
+										input.form-control( type="tel", id="ph", name="telPh", minlength="10", maxlength="10", placeholder="2018888888", required="true")
+
+										label.form-label(for="email") Email:
+										input.form-control(type="email", id="email", name="email", placeholder="jdoe@ramapo.edu", required="true")
+
+									p How may we contact you?
+									.form-check.form-check-inline
+										input.form-check-input(type="checkbox", id="chkPh", name="chkContact", value="phone")
+										label.form-check-label(for="chkPh") Phone
+									.form-check.form-check-inline
+										input.form-check-input(type="checkbox", id="chkMail", name="chkContact", value="mail")
+										label.form-check-label(for="chkMail") Mail
+									.form-check.form-check-inline
+										input.form-check-input(type="checkbox", id="chkEMail", name="chkContact", value="email")
+										label.form-check-label(for="chkEMail") Email
+									.form-check.form-check-inline
+										input.form-check-input(type="checkbox", id="chkAny", name="chkContact", value="any", checked)
+										label.form-check-label(for="chkCAny") Any
+									.form-group
+										input.form-control(type="text", id="contactId", value ="", hidden)
+
+									.form-group
+										input.form-control(type="button", id="sendSpam", onclick="ProcessNewForm('ContactForm')", value="Send me spam forever")
+										input.form-control(type="button",id="updateInfo", onclick="ProcessUpdateForm('ContactForm')", value="Update")
